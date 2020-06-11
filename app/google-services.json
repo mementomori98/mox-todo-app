@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "840745975228",
+    "firebase_url": "https://bigtalk-app.firebaseio.com",
+    "project_id": "bigtalk-app",
+    "storage_bucket": "bigtalk-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840745975228:android:2ab015d759e7273b153fb9",
+        "android_client_info": {
+          "package_name": "mox.learn.bigtalkapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840745975228-cl5s74l53fg220lk0vbapvq50v2tefjv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa7VG_VFaha76av4iUjuBrQ4XV7JLg4bY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840745975228-cl5s74l53fg220lk0vbapvq50v2tefjv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840745975228:android:49c5e0b35b0ef19f153fb9",
+        "android_client_info": {
+          "package_name": "mox.todos.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840745975228-cl5s74l53fg220lk0vbapvq50v2tefjv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa7VG_VFaha76av4iUjuBrQ4XV7JLg4bY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840745975228-cl5s74l53fg220lk0vbapvq50v2tefjv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

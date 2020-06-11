@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import mox.todo.app.R
 import mox.todo.app.ui.fragments.SettingsFragment
 import mox.todo.app.ui.fragments.TodosFragment
@@ -32,6 +33,8 @@ class MainActivity : ActivityBase() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        FirebaseAuth.getInstance().signOut()
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
