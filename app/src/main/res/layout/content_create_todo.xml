@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="60sp"
+    android:paddingHorizontal="20sp">
+
+    <TextView
+        android:text="@string/create_todo_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:text="@string/create_task_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/title"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textColor="?android:textColor"/>
+
+    <TextView
+        android:id="@+id/tv_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_task_notes" />
+
+    <EditText
+        android:id="@+id/notes"
+        android:gravity="top|start"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:minLines="1"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?android:textColor"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="@string/create_task_priority"
+            android:layout_height="wrap_content"
+            android:layout_width="100sp"
+            android:layout_gravity="center"/>
+
+        <NumberPicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/priority"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

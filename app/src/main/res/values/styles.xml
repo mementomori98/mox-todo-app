@@ -1,0 +1,52 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="AppTheme">
+        <item name="android:textColor">@color/textColorLight</item>
+        <item name="android:textAppearance">@color/textColorLight</item>
+
+        <item name="android:windowBackground">@color/backgroundLight</item>
+        <item name="android:colorBackground">@color/backgroundLight</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="AppTheme">
+        <item name="colorPrimary">@color/backgroundDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textColor">@color/textColorDark</item>
+        <item name="android:textAppearance">@color/textColorDark</item>
+
+        <item name="android:windowBackground">@color/backgroundDark</item>
+        <item name="android:colorBackground">@color/backgroundDark</item>
+    </style>
+
+
+    <style name="TextLarge">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="TextSmall">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>
