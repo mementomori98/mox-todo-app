@@ -1,7 +1,5 @@
 package mox.todo.app
 
-import androidx.annotation.StyleRes
-
 class Preferences private constructor() {
 
     companion object {
