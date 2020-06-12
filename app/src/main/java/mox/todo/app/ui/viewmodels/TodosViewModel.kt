@@ -11,14 +11,13 @@ class TodosViewModel : ViewModel() {
     private val todoRepository = TodoApiRepository.instance
     private val todoListRepository = TodoListApiRepository.instance
 
-
     var listId: Int? = null
 
-    fun todos() = todoRepository.liveData()
+    fun todos() = todoRepository.liveData(listId)
     fun listName() = (listId?.let{ todoListRepository.getById(it) })?.name ?: "All Todos"
-    fun listColor(listId: Int? = null): Int {
-        val id = listId ?: this.listId
-        return (id?.let{ todoListRepository.getById(it) })?.color ?: 0
+    fun listColor(): Int {
+        if (listId == null) return 0
+        return todoListRepository.getById(listId!!).color
     }
 
     fun deleteTodo(todo: Todo) = todoRepository.delete(todo.key)

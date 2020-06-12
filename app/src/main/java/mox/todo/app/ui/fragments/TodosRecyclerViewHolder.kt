@@ -22,19 +22,19 @@ class TodosRecyclerViewHolder(itemView: View, listener: Consumer<Int>) : Recycle
             listener.accept(adapterPosition)
         }
 
-        hideEmptyText(notes)
         hideEmptyText(list)
+        hideEmptyText(notes)
     }
 
     private fun hideEmptyText(textView: TextView) {
         textView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if ((s?.toString() ?: "") == (""))
+                if (s?.toString() == null || s.toString() == "")
                     textView.height = 0
                 else {
-                    val params = notes.layoutParams
+                    val params = textView.layoutParams
                     params.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    notes.layoutParams = params
+                    textView.layoutParams = params
                 }
             }
 

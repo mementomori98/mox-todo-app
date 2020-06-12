@@ -25,7 +25,10 @@ class TodosRecyclerAdapter(
 ) : RecyclerView.Adapter<TodosRecyclerViewHolder>() {
 
     init {
-        todos.observe(lifeCycleOwner, Observer { notifyDataSetChanged() })
+        todos.observe(lifeCycleOwner, Observer {
+            notifyDataSetChanged()
+        })
+
         recyclerView.adapter = this
         ItemTouchHelper(touchListener()).attachToRecyclerView(recyclerView)
     }

@@ -2,11 +2,14 @@ package mox.todo.app.repositories
 
 import mox.todo.app.api.ApiFactory
 import mox.todo.app.api.TodoApi
+import mox.todo.app.models.Todo
 import mox.todo.app.models.TodoList
 import mox.todo.app.util.MutableLiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TodoListApiRepository private constructor() : TodoListRepository {
 
@@ -18,7 +21,7 @@ class TodoListApiRepository private constructor() : TodoListRepository {
     private val api = ApiFactory.build<TodoApi>()
 
     init {
-        liveData.value = ArrayList()
+        liveData.value = ArrayList() // must not be null
         updateLiveData()
     }
 

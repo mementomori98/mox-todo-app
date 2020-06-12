@@ -82,7 +82,7 @@ class CreateListActivity : ActivityBase() {
             orange.setOnClickListener(this::onClick)
             green.setOnClickListener(this::onClick)
 
-            selected = blue // Kotlin compile error fix
+            selected = blue // Must be set in constructor
             select(blue)
         }
 

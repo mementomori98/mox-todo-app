@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mox.todo.app.R
@@ -14,8 +15,6 @@ import mox.todo.app.ui.viewmodels.TodosViewModel
 
 class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewModel>() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: TodosRecyclerAdapter
     private lateinit var root: View
 
     override fun onCreateView(
@@ -34,10 +33,10 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
     }
 
     private fun setupRecyclerView() {
-        recyclerView = root.findViewById(R.id.rv)
+        val recyclerView = root.findViewById<RecyclerView>(R.id.rv)
         recyclerView.hasFixedSize()
         recyclerView.layoutManager = LinearLayoutManager(root.context)
-        adapter = TodosRecyclerAdapter(
+        TodosRecyclerAdapter(
             viewModel.todos(),
             { Toast.makeText(activity, "${it.title} selected", Toast.LENGTH_SHORT).show() },
             viewModel::deleteTodo,
