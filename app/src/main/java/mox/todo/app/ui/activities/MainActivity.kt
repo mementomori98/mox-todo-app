@@ -35,8 +35,6 @@ class MainActivity : ActivityBase() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        FirebaseAuth.getInstance().signOut()
-
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         setupNavigation()

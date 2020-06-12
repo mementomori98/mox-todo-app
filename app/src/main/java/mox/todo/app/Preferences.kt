@@ -9,7 +9,7 @@ class Preferences private constructor() {
     }
 
     fun getTheme(): Int {
-        return R.style.AppTheme_Dark
+        return R.style.AppTheme_Light
     }
 
 }
