@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -70,12 +71,6 @@ class MainActivity : ActivityBase() {
         return true
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        reinitializeTodoListItems()
-    }
-
     private fun loadFragment(fragment: Fragment) {
         title = "Todos"
         val transaction = supportFragmentManager.beginTransaction()
@@ -111,17 +106,19 @@ class MainActivity : ActivityBase() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected)
 
-        reinitializeTodoListItems()
+        observeLists()
     }
 
-    private fun reinitializeTodoListItems() {
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        val menu = navigationView.menu
-        menu.removeGroup(R.id.menu_todo_lists)
-        menu.add(R.id.menu_todo_lists, allTodosId, Menu.NONE, "All Todos")
-        viewModel.todoLists().value.forEach {
-            menu.add(R.id.menu_todo_lists, it.id, it.id + 1, it.name)
-        }
+    private fun observeLists() {
+        viewModel.todoLists().observe(this, Observer {
+            val navigationView: NavigationView = findViewById(R.id.nav_view)
+            val menu = navigationView.menu
+            menu.removeGroup(R.id.menu_todo_lists)
+            menu.add(R.id.menu_todo_lists, allTodosId, Menu.NONE, "All Todos")
+            it.forEach { list ->
+                menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name)
+            }
+        })
     }
 
 }

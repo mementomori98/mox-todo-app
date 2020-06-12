@@ -5,8 +5,8 @@ import mox.todo.app.models.Todo
 
 interface TodoRepository {
 
-    fun liveData(listId: Int? = null): LiveData<List<Todo>>
-    fun add(todo: Todo, position: Int = 0): Todo
-    fun delete(id: Int): Boolean
+    fun liveData(): LiveData<List<Todo>>
+    fun add(todo: Todo, position: Int = 0)
+    fun delete(id: Int)
 
 }

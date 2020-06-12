@@ -5,7 +5,7 @@ import mox.todo.app.models.TodoList
 import retrofit2.Call
 import retrofit2.http.*
 
-interface TodoApi : Api {
+interface TodoApi {
 
     @GET("todos")
     fun getTodos(): Call<List<Todo>>

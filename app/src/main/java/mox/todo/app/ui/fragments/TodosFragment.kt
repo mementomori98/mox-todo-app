@@ -37,7 +37,7 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
 
         adapter = Adapter(viewModel.todos())
         viewModel.todos()
-            .observe(this, Observer { adapter.notifyDataSetChanged() })
+            .observe(viewLifecycleOwner, Observer { adapter.notifyDataSetChanged() })
         activity?.title = viewModel.listName()
         activity?.findViewById<Toolbar>(R.id.toolbar)
             ?.setBackgroundColor(
@@ -75,7 +75,11 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
-            val todo = viewModel.todos().value[position]
+            val todo = viewModel.todos().value.filter {
+                (it.list ?: "All Todos").let {
+                        name -> viewModel.listName() == name
+                } || viewModel.listId == null
+            }[position]
             viewModel.deleteTodo(todo)
             Snackbar.make(recyclerView, "Deleted '${todo.title}'", Snackbar.LENGTH_LONG)
                 .setAction("UNDO") { viewModel.addTodo(todo, position) }
@@ -87,6 +91,12 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
 
     inner class Adapter(private val todos: LiveData<List<Todo>>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
+        private val data get() = todos.value.filter {
+            (it.list ?: "All Todos").let {
+                    name -> viewModel.listName() == name
+            } || viewModel.listId == null
+        }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val view = inflater.inflate(R.layout.rv_todo_item, parent, false)
@@ -97,16 +107,16 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
         }
 
         override fun getItemCount(): Int {
-            return todos.value.size
+            return data.size
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val todo = todos.value[position]
+            val todo = data[position]
             holder.title.text = todo.title
             holder.notes.text = todo.notes
             holder.priority.text = todo.priority.toString()
-            holder.list.text = viewModel.listName(todo.listId)
-            holder.marker.setBackgroundColor(resources.getColor(mapListColor(viewModel.listColor(todo.listId)), null))
+            holder.list.text = todo.list
+            holder.marker.setBackgroundColor(resources.getColor(mapListColor(todo.color), null))
         }
 
         inner class ViewHolder(itemView: View, listener: Consumer<Int>) : RecyclerView.ViewHolder(itemView) {

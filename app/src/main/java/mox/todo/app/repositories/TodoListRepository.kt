@@ -8,8 +8,8 @@ interface TodoListRepository {
     fun liveData(): LiveData<List<TodoList>>
     fun getAll(): List<TodoList>
     fun getById(id: Int): TodoList
-    fun add(todoList: TodoList): TodoList
-    fun delete(id: Int): Boolean
+    fun add(todoList: TodoList)
+    fun delete(id: Int)
     fun exists(id: Int): Boolean
 
 }

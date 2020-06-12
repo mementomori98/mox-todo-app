@@ -20,14 +20,13 @@ class CreateTodoActivity : ActivityBase() {
     private lateinit var title: EditText
     private lateinit var notes: EditText
     private lateinit var priority: NumberPicker
-    private var listId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_todo)
         viewModel = ViewModelProviders.of(this).get(CreateTodoViewModel::class.java)
         intent.extras?.getInt("listId").let {
-            listId = if(it == 0) null else it
+            viewModel.listId = if(it == 0) null else it
         }
         initializeViews()
         setupNavigation()
@@ -56,7 +55,7 @@ class CreateTodoActivity : ActivityBase() {
             title.text.toString(),
             notes.text.toString(),
             priority.value,
-            listId))
+            viewModel.listName))
         )
             finish()
         else

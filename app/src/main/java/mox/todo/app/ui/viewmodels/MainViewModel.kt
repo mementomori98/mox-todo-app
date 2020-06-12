@@ -1,14 +1,11 @@
 package mox.todo.app.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import mox.todo.app.models.Todo
-import mox.todo.app.repositories.TodoListRepositoryImpl
-import mox.todo.app.repositories.TodoRepositoryImpl
-import mox.todo.app.util.LiveData
+import mox.todo.app.repositories.TodoListApiRepository
 
 class MainViewModel : ViewModel() {
 
-    private val todoListRepository = TodoListRepositoryImpl.instance
+    private val todoListRepository = TodoListApiRepository.instance
 
     fun todoLists() = todoListRepository.liveData()
 
