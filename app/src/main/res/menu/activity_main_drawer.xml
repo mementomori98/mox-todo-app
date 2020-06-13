@@ -2,15 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single"
         android:id="@+id/menu_todo_lists">
-<!--        <item-->
-<!--            android:id="@+id/nav_todos"-->
-<!--            android:icon="@drawable/ic_placeholder"-->
-<!--            android:title="@string/menu_todos"-->
-<!--            android:orderInCategory="1"/>-->
     </group>
     <group android:checkableBehavior="single"
         android:id="@+id/menu_options">
-
         <item
             android:id="@+id/nav_new_list"
             android:icon="@drawable/ic_placeholder"

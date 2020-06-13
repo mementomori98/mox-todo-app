@@ -5,16 +5,14 @@ import mox.todo.app.models.Todo
 import mox.todo.app.repositories.TodoApiRepository
 import mox.todo.app.repositories.TodoListApiRepository
 
-class CreateTodoViewModel : ViewModel() {
+class UpdateTodoViewModel : ViewModel() {
 
     private val todoRepository = TodoApiRepository.instance
     private val listRepository = TodoListApiRepository.instance
 
-    var listId: Int? = null
+    lateinit var todo: Todo
 
-    val listName: String get() = listId?.let { listRepository.getById(it).name } ?: ""
-
-    fun addTodo(todo: Todo) = todoRepository.add(todo)
+    fun updateTodo(todo: Todo) = todoRepository.update(todo)
 
     fun listNames() = listRepository.getAll().map { it.name }
 

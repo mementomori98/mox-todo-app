@@ -11,6 +11,8 @@ interface TodoApi {
     fun getTodos(): Call<List<Todo>>
     @POST("todos")
     fun addTodo(@Body todo: Todo): Call<Todo>
+    @PATCH("todos")
+    fun updateTodo(@Body todo: Todo): Call<Todo>
     @DELETE("todos/{key}")
     fun deleteTodo(@Path("key") key: Int): Call<Void>
 

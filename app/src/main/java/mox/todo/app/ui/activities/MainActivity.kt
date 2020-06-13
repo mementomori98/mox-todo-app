@@ -1,7 +1,10 @@
 package mox.todo.app.ui.activities
 
+import android.app.ActionBar
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -114,7 +117,8 @@ class MainActivity : ActivityBase() {
             menu.removeGroup(R.id.menu_todo_lists)
             menu.add(R.id.menu_todo_lists, allTodosId, Menu.NONE, "All Todos")
             it.forEach { list ->
-                menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name)
+                val item = menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name)
+//                item.setActionView(R.layout.drawer_list_item)
             }
         })
     }

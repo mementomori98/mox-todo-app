@@ -1,6 +1,5 @@
 package mox.todo.app.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -64,19 +63,14 @@ class CreateListActivity : ActivityBase() {
 
     inner class ColorPicker {
 
-        private val blue: RadioButton
-        private val red: RadioButton
-        private val orange: RadioButton
-        private val green: RadioButton
+        private val blue: RadioButton = findViewById(R.id.blue)
+        private val red: RadioButton = findViewById(R.id.red)
+        private val orange: RadioButton = findViewById(R.id.orange)
+        private val green: RadioButton = findViewById(R.id.green)
 
         private var selected: RadioButton
 
         init {
-            blue = findViewById(R.id.blue)
-            red = findViewById(R.id.red)
-            orange = findViewById(R.id.orange)
-            green = findViewById(R.id.green)
-
             blue.setOnClickListener(this::onClick)
             red.setOnClickListener(this::onClick)
             orange.setOnClickListener(this::onClick)

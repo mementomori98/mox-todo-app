@@ -1,5 +1,6 @@
 package mox.todo.app.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mox.todo.app.R
 import mox.todo.app.models.Todo
+import mox.todo.app.ui.activities.UpdateTodoActivity
 import mox.todo.app.ui.viewmodels.TodosViewModel
 
 class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewModel>() {
@@ -38,15 +40,25 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
         recyclerView.layoutManager = LinearLayoutManager(root.context)
         TodosRecyclerAdapter(
             viewModel.todos(),
-            { Toast.makeText(activity, "${it.title} selected", Toast.LENGTH_SHORT).show() },
+            this::updateTodo,
             viewModel::deleteTodo,
-            viewModel::addTodo,
+            this::additionListener,
             this::mapColor,
             recyclerView,
             resources,
             viewLifecycleOwner
         )
         resources
+    }
+
+    private fun additionListener(todo: Todo, position: Int) {
+        viewModel.addTodo(todo, position)
+    }
+
+    private fun updateTodo(todo: Todo) {
+        val intent = Intent(activity, UpdateTodoActivity::class.java)
+        intent.putExtra("todo", todo)
+        startActivity(intent)
     }
 
     private fun mapColor(listColor: Int) = when (listColor) {

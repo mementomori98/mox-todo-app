@@ -47,17 +47,39 @@ class TodoApiRepository private constructor() : TodoRepository {
         }
     }
 
-    override fun add(todo: Todo, position: Int) {
+    override fun add(todo: Todo, position: Int): Boolean {
+        if (todo.title == "") return false
+        todo.position = position
         api.addTodo(todo).enqueue(object : Callback<Todo> {
             override fun onFailure(call: Call<Todo>, t: Throwable) {
                 Log.d("API", "Add todo failure")
             }
 
             override fun onResponse(call: Call<Todo>, response: Response<Todo>) {
-                Log.d("API", "Add todo success")
-                updateLiveData()
+                if (response.isSuccessful)
+                    updateLiveData()
+                else
+                    Log.d("API", "Add todo failed")
             }
         })
+        return true
+    }
+
+    override fun update(todo: Todo): Boolean {
+        if (todo.title == "") return false
+        api.updateTodo(todo).enqueue(object : Callback<Todo> {
+            override fun onFailure(call: Call<Todo>, t: Throwable) {
+                Log.d("API", "Add todo failure")
+            }
+
+            override fun onResponse(call: Call<Todo>, response: Response<Todo>) {
+                if (response.isSuccessful)
+                    updateLiveData()
+                else
+                    Log.d("API", "Update todo failed")
+            }
+        })
+        return true
     }
 
     override fun delete(id: Int) = api.deleteTodo(id).enqueue(object : Callback<Void> {

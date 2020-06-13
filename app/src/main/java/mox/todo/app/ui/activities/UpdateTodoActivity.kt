@@ -1,31 +1,30 @@
 package mox.todo.app.ui.activities
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mox.todo.app.R
 import mox.todo.app.models.Todo
-import mox.todo.app.ui.viewmodels.CreateTodoViewModel
+import mox.todo.app.ui.viewmodels.UpdateTodoViewModel
 
-class CreateTodoActivity : ActivityBase() {
+class UpdateTodoActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: CreateTodoViewModel
+    private lateinit var viewModel: UpdateTodoViewModel
     private lateinit var title: EditText
     private lateinit var notes: EditText
     private lateinit var priority: NumberPicker
     private lateinit var list: Spinner
+    private lateinit var todo: Todo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_todo)
-        viewModel = ViewModelProviders.of(this).get(CreateTodoViewModel::class.java)
-        intent.extras?.getInt("listId").let {
-            viewModel.listId = if(it == 0) null else it
-        }
+        setContentView(R.layout.activity_update_todo)
+        viewModel = ViewModelProviders.of(this).get(UpdateTodoViewModel::class.java)
+        viewModel.todo = intent.extras?.getSerializable("todo") as Todo
         initializeViews()
         setupNavigation()
     }
@@ -40,8 +39,12 @@ class CreateTodoActivity : ActivityBase() {
         list = findViewById(R.id.list)
         list.adapter = ArrayAdapter(this,
             android.R.layout.simple_list_item_1, viewModel.listNames())
-        val index = viewModel.listNames().indexOfFirst { it == viewModel.listName }
+        val index = viewModel.listNames().indexOfFirst { it == viewModel.todo.list }
         list.setSelection(if (index == -1) 0 else index)
+
+        title.setText(viewModel.todo.title)
+        notes.setText(viewModel.todo.notes)
+        priority.value = viewModel.todo.priority
     }
 
     private fun setupNavigation() {
@@ -50,22 +53,26 @@ class CreateTodoActivity : ActivityBase() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { createTodo() }
+        fab.setOnClickListener { updateTodo() }
     }
 
-    private fun createTodo() {
-        if (viewModel.addTodo(Todo(
-            title.text.toString(),
-            notes.text.toString(),
-            priority.value,
-            list.selectedItem?.toString()))
+    private fun updateTodo() {
+        if (viewModel.updateTodo(
+                Todo(
+                title.text.toString(),
+                notes.text.toString(),
+                priority.value,
+                list.selectedItem?.toString(),
+                0,
+                viewModel.todo.key)
+            )
         )
             finish()
         else
             Toast.makeText(this,
                 getString(R.string.todo_create_error),
                 Toast.LENGTH_SHORT)
-            .show()
+                .show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -75,4 +82,5 @@ class CreateTodoActivity : ActivityBase() {
 
         return super.onOptionsItemSelected(item)
     }
+
 }
