@@ -29,8 +29,11 @@ class TodosRecyclerViewHolder(itemView: View, listener: Consumer<Int>) : Recycle
     private fun hideEmptyText(textView: TextView) {
         textView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (s?.toString() == null || s.toString() == "")
-                    textView.height = 0
+                if (s?.toString() == null || s.toString() == "") {
+                    val params = textView.layoutParams
+                    params.height = 0
+                    textView.layoutParams = params
+                }
                 else {
                     val params = textView.layoutParams
                     params.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -39,9 +42,11 @@ class TodosRecyclerViewHolder(itemView: View, listener: Consumer<Int>) : Recycle
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
             }
         })
     }

@@ -91,7 +91,7 @@ class TodoApiRepository private constructor() : TodoRepository {
         }
     })
 
-    private fun updateLiveData() {
+    fun updateLiveData() {
         api.getTodos().enqueue(object : Callback<List<Todo>> {
             override fun onFailure(call: Call<List<Todo>>, t: Throwable) {
                 throw t

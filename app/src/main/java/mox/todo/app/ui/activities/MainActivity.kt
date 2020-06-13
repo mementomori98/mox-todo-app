@@ -29,7 +29,6 @@ import kotlin.reflect.KClass
 class MainActivity : ActivityBase() {
 
     private val allTodosId = 1000000
-    private var listId: Int? = null
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var viewModel: MainViewModel
@@ -44,34 +43,6 @@ class MainActivity : ActivityBase() {
         loadFragment(TodosFragment())
     }
 
-    private fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        when(item.itemId) {
-            allTodosId -> {
-                listId = null
-                loadFragment(TodosFragment())
-            }
-            R.id.nav_settings -> loadFragment(SettingsFragment())
-            R.id.nav_new_list -> loadActivity(CreateListActivity::class)
-            else -> {
-                listId = item.itemId
-                loadFragment(TodosFragment(listId))
-            }
-        }
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Toast.makeText(this, "Hello World from options", LENGTH_SHORT).show()
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
     private fun loadFragment(fragment: Fragment) {
         title = "Todos"
         val transaction = supportFragmentManager.beginTransaction()
@@ -79,7 +50,7 @@ class MainActivity : ActivityBase() {
         transaction.commit()
     }
 
-    private fun<T> loadActivity(activity: KClass<T>, bundle: Bundle? = null) where T : Any {
+    private fun <T> loadActivity(activity: KClass<T>, bundle: Bundle? = null) where T : Any {
         val intent = Intent(
             applicationContext,
             activity.java
@@ -95,7 +66,7 @@ class MainActivity : ActivityBase() {
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             val bundle = Bundle()
-            listId?.let { bundle.putInt("listId", it) }
+            viewModel.listId?.let { bundle.putInt("listId", it) }
             loadActivity(CreateTodoActivity::class, bundle)
         }
 
@@ -116,11 +87,40 @@ class MainActivity : ActivityBase() {
             val menu = navigationView.menu
             menu.removeGroup(R.id.menu_todo_lists)
             menu.add(R.id.menu_todo_lists, allTodosId, Menu.NONE, "All Todos")
-            it.forEach { list ->
-                val item = menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name)
-//                item.setActionView(R.layout.drawer_list_item)
-            }
+            it.forEach { list -> menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name) }
         })
+    }
+
+    private fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        when (item.itemId) {
+            allTodosId -> {
+                viewModel.listId = null
+                loadFragment(TodosFragment())
+            }
+            R.id.nav_settings -> loadFragment(SettingsFragment())
+            R.id.nav_new_list -> loadActivity(CreateListActivity::class)
+            else -> {
+                viewModel.listId = item.itemId
+                loadFragment(TodosFragment(viewModel.listId) { loadFragment(TodosFragment()) })
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (viewModel.listId != null)
+            menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_delete_list -> false
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }

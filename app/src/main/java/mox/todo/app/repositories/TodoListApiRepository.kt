@@ -14,11 +14,20 @@ import kotlin.collections.ArrayList
 class TodoListApiRepository private constructor() : TodoListRepository {
 
     companion object {
-        val instance = TodoListApiRepository()
+
+        private var _instance: TodoListRepository? = null
+
+        val instance: TodoListRepository get() {
+            if (_instance == null)
+                _instance = TodoListApiRepository()
+            return _instance!!
+        }
+
     }
 
     private val liveData = MutableLiveData<List<TodoList>>()
     private val api = ApiFactory.build<TodoApi>()
+    private val todoRepository = TodoApiRepository.instance
 
     init {
         liveData.value = ArrayList() // must not be null
@@ -49,6 +58,7 @@ class TodoListApiRepository private constructor() : TodoListRepository {
 
         override fun onResponse(call: Call<Void>, response: Response<Void>) {
             updateLiveData()
+            todoRepository.updateLiveData()
         }
     })
 

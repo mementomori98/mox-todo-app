@@ -7,6 +7,7 @@ class MainViewModel : ViewModel() {
 
     private val todoListRepository = TodoListApiRepository.instance
 
+    var listId: Int? = null
     fun todoLists() = todoListRepository.liveData()
 
 }

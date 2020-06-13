@@ -21,6 +21,7 @@ class TodosViewModel : ViewModel() {
     }
 
     fun deleteTodo(todo: Todo) = todoRepository.delete(todo.key)
+    fun deleteList() = todoListRepository.delete(listId!!)
     fun addTodo(todo: Todo, position: Int = 0) = todoRepository.add(todo, position)
 
 }

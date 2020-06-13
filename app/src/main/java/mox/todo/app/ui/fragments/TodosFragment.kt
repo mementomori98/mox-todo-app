@@ -3,11 +3,10 @@ package mox.todo.app.ui.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mox.todo.app.R
@@ -15,7 +14,7 @@ import mox.todo.app.models.Todo
 import mox.todo.app.ui.activities.UpdateTodoActivity
 import mox.todo.app.ui.viewmodels.TodosViewModel
 
-class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewModel>() {
+class TodosFragment(private val listId: Int? = null, private val onListDeleteListener: () -> Unit = {}) : FragmentBase<TodosViewModel>() {
 
     private lateinit var root: View
 
@@ -24,6 +23,7 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+        setHasOptionsMenu(true)
         root = getRoot(R.layout.fragment_todos, container, inflater)
         initViewModel<TodosViewModel>()
         viewModel.listId = listId
@@ -32,6 +32,16 @@ class TodosFragment(private val listId: Int? = null) : FragmentBase<TodosViewMod
         setupRecyclerView()
 
         return root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_delete_list -> {
+                viewModel.deleteList()
+                onListDeleteListener()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupRecyclerView() {
