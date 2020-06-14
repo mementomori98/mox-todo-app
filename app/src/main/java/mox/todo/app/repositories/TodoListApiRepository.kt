@@ -66,7 +66,7 @@ class TodoListApiRepository private constructor() : TodoListRepository {
         return liveData.value.any { it.key == id }
     }
 
-    private fun updateLiveData() {
+    override fun updateLiveData() {
         val call = api.getLists()
         call.enqueue(object : Callback<List<TodoList>> {
             override fun onFailure(call: Call<List<TodoList>>, t: Throwable) {
@@ -76,7 +76,7 @@ class TodoListApiRepository private constructor() : TodoListRepository {
             override fun onResponse(call: Call<List<TodoList>>, response: Response<List<TodoList>>) {
                 response.body()?.let {
                     liveData.value = it
-                } ?: throw Exception()
+                }
             }
 
         })

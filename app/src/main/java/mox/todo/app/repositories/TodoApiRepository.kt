@@ -16,34 +16,39 @@ import kotlin.collections.HashMap
 class TodoApiRepository private constructor() : TodoRepository {
 
     companion object {
-        val instance = TodoApiRepository()
+        private var _instance: TodoRepository? = null
+
+        val instance: TodoRepository get() {
+            if (_instance == null)
+                _instance = TodoApiRepository()
+            return _instance!!
+        }
     }
 
     private val liveData = MutableLiveData<List<Todo>>()
-    private val liveDataMap = HashMap<Int, MutableLiveData<List<Todo>>>()
+    private val liveDataMap = HashMap<String, MutableLiveData<List<Todo>>>()
     private val api = ApiFactory.build<TodoApi>()
-    private val listRepository = TodoListApiRepository.instance
 
     init {
         liveData.value = ArrayList()
         updateLiveData()
     }
 
-    override fun liveData(listId: Int?): LiveData<List<Todo>> {
-        if (listId == null) return liveData
-        return liveDataMap[listId] ?: createListLiveData(listId)
+    override fun liveData(list: String?): LiveData<List<Todo>> {
+        if (list == null) return liveData
+        return liveDataMap[list] ?: createListLiveData(list)
     }
 
-    private fun createListLiveData(listId: Int): MutableLiveData<List<Todo>> {
+    private fun createListLiveData(list: String): MutableLiveData<List<Todo>> {
         val liveData = MutableLiveData<List<Todo>>()
-        liveData.value = filterLiveDataByList(listId)
-        liveDataMap[listId] = liveData
+        liveData.value = filterLiveDataByList(list)
+        liveDataMap[list] = liveData
         return liveData
     }
 
-    private fun filterLiveDataByList(listId: Int): List<Todo> {
+    private fun filterLiveDataByList(list: String): List<Todo> {
         return this.liveData.value.filter {
-            it.list == listRepository.getById(listId).name
+            it.list == list
         }
     }
 
@@ -91,7 +96,7 @@ class TodoApiRepository private constructor() : TodoRepository {
         }
     })
 
-    fun updateLiveData() {
+    override fun updateLiveData() {
         api.getTodos().enqueue(object : Callback<List<Todo>> {
             override fun onFailure(call: Call<List<Todo>>, t: Throwable) {
                 throw t
@@ -101,10 +106,10 @@ class TodoApiRepository private constructor() : TodoRepository {
                 response.body()?.let {
                     val list = it.sortedBy { t -> t.list?.toLowerCase(Locale.ROOT) ?: "a" }
                     liveData.value = list
-                    liveDataMap.forEach { (listId, data) ->
-                        data.value = filterLiveDataByList(listId)
+                    liveDataMap.forEach { (list, data) ->
+                        data.value = filterLiveDataByList(list)
                     }
-                } ?: throw Exception()
+                }
             }
 
         })

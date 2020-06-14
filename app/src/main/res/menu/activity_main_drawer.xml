@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single"
+    <group android:checkableBehavior="none"
         android:id="@+id/menu_todo_lists">
     </group>
-    <group android:checkableBehavior="single"
+    <group android:checkableBehavior="none"
         android:id="@+id/menu_options">
         <item
             android:id="@+id/nav_new_list"
@@ -15,6 +15,12 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_settings"
             android:title="@string/menu_settings"
+            android:orderInCategory="-1"/>
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_placeholder"
+            android:title="@string/menu_logout"
             android:orderInCategory="-1"/>
     </group>
 </menu>

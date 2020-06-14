@@ -6,11 +6,15 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mox.todo.app.R
 import mox.todo.app.models.Todo
+import mox.todo.app.ui.activities.CreateTodoActivity
 import mox.todo.app.ui.activities.UpdateTodoActivity
 import mox.todo.app.ui.viewmodels.TodosViewModel
 
@@ -27,6 +31,20 @@ class TodosFragment(private val listId: Int? = null, private val onListDeleteLis
         root = getRoot(R.layout.fragment_todos, container, inflater)
         initViewModel<TodosViewModel>()
         viewModel.listId = listId
+
+        val fab: FloatingActionButton = root.findViewById(R.id.fab)
+        fab.setOnClickListener {
+            if (!viewModel.hasLists()) {
+                Toast.makeText(activity, resources.getString(R.string.no_list_error), Toast.LENGTH_LONG).show()
+            }
+            else {
+                val bundle = Bundle()
+                viewModel.listId?.let { bundle.putInt("listId", it) }
+                val intent = Intent(activity, CreateTodoActivity::class.java)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            }
+        }
 
         setViewColors()
         setupRecyclerView()
@@ -56,6 +74,8 @@ class TodosFragment(private val listId: Int? = null, private val onListDeleteLis
             this::mapColor,
             recyclerView,
             resources,
+            getBooleanPreference("compact"),
+            viewModel.listId != null,
             viewLifecycleOwner
         )
         resources

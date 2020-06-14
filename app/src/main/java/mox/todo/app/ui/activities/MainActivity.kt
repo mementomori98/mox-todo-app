@@ -1,16 +1,10 @@
 package mox.todo.app.ui.activities
 
-import android.app.ActionBar
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.widget.Toolbar
@@ -40,7 +34,10 @@ class MainActivity : ActivityBase() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         setupNavigation()
-        loadFragment(TodosFragment())
+        if (intent.extras?.getBoolean("settings") == true)
+            loadFragment(SettingsFragment())
+        else
+            loadFragment(TodosFragment())
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -63,13 +60,6 @@ class MainActivity : ActivityBase() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener {
-            val bundle = Bundle()
-            viewModel.listId?.let { bundle.putInt("listId", it) }
-            loadActivity(CreateTodoActivity::class, bundle)
-        }
-
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.nav_header_title, R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -78,37 +68,44 @@ class MainActivity : ActivityBase() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected)
 
-        observeLists()
+        observeDrawerListItems()
     }
 
-    private fun observeLists() {
-        viewModel.todoLists().observe(this, Observer {
-            val navigationView: NavigationView = findViewById(R.id.nav_view)
-            val menu = navigationView.menu
-            menu.removeGroup(R.id.menu_todo_lists)
-            menu.add(R.id.menu_todo_lists, allTodosId, Menu.NONE, "All Todos")
-            it.forEach { list -> menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name) }
-        })
-    }
+    private fun observeDrawerListItems() = viewModel.todoLists().observe(this, Observer { lists ->
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val menu = navigationView.menu
+        menu.removeGroup(R.id.menu_todo_lists)
+        menu.add(R.id.menu_todo_lists, allTodosId, Menu.NONE, resources.getString(R.string.all_todos))
+        lists.forEach { list -> menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name) }
+    })
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        viewModel.listId = null
         when (item.itemId) {
-            allTodosId -> {
-                viewModel.listId = null
-                loadFragment(TodosFragment())
-            }
+            allTodosId -> loadFragment(TodosFragment())
             R.id.nav_settings -> loadFragment(SettingsFragment())
             R.id.nav_new_list -> loadActivity(CreateListActivity::class)
-            else -> {
-                viewModel.listId = item.itemId
-                loadFragment(TodosFragment(viewModel.listId) { loadFragment(TodosFragment()) })
-            }
+            R.id.nav_logout -> logout()
+            else -> loadAllTodos(item.itemId)
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
+    private fun loadAllTodos(listId: Int) {
+        viewModel.listId = listId
+        loadFragment(TodosFragment(viewModel.listId) {
+            viewModel.listId = null
+            loadFragment(TodosFragment())
+        })
+    }
+
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        startActivity(Intent(this, StartupActivity::class.java))
+        finish()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (viewModel.listId != null)
@@ -116,11 +113,9 @@ class MainActivity : ActivityBase() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_delete_list -> false
-            else -> super.onOptionsItemSelected(item)
-        }
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_delete_list -> false
+        else -> super.onOptionsItemSelected(item)
     }
 
 }

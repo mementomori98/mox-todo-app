@@ -21,6 +21,8 @@ class TodosRecyclerAdapter(
     private val colorMapper: (Int) -> Int,
     private val recyclerView: RecyclerView,
     private val resources: Resources,
+    private val compact: Boolean,
+    private val isList: Boolean,
     lifeCycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<TodosRecyclerViewHolder>() {
 
@@ -47,9 +49,9 @@ class TodosRecyclerAdapter(
     override fun onBindViewHolder(holder: TodosRecyclerViewHolder, position: Int) {
         val todo = todos.value[position]
         holder.title.text = todo.title
-        holder.notes.text = todo.notes
+        holder.notes.text = if (!compact) todo.notes else ""
         holder.priority.text = todo.priority.toString()
-        holder.list.text = todo.list
+        holder.list.text = if (!isList) todo.list else ""
         holder.marker.setBackgroundColor(resources.getColor(colorMapper(todo.color), null))
     }
 

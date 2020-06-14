@@ -11,5 +11,6 @@ interface TodoListRepository {
     fun add(todoList: TodoList)
     fun delete(id: Int)
     fun exists(id: Int): Boolean
+    fun updateLiveData()
 
 }

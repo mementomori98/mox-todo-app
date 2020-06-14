@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">To wa\'?</string>
+    <string name="nav_header_title">To wa\'?</string>
+    <string name="nav_header_subtitle">Avast ye!</string>
+    <string name="action_delete_list">Scuttle!</string>
+    <string name="menu_settings">Heave ho</string>
+    <string name="title_activity_create_todo">Kill the day</string>
+    <string name="create_task_name">Ahoy matey</string>
+    <string name="create_task_notes">Aye aye</string>
+    <string name="create_task_priority">Binnacle</string>
+    <string name="todo_create_error">You Bung Hole!</string>
+    <string name="menu_new_list">Make Duffle</string>
+    <string name="create_list_name">Crow\'s nest</string>
+    <string name="title_activity_create_list">Shark bait!</string>
+    <string name="create_list_color">Booty</string>
+    <string name="create_todo_list">Treasure map</string>
+    <string name="menu_logout">Blow the man down</string>
+    <string name="settings_theme">Hurraay!</string>
+    <string name="all_todos">All hands hoay</string>
+    <string name="no_list_error">You Landlubber!</string>
+</resources>
