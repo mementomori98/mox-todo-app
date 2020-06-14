@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.SettingsFragment"
     android:columnCount="2"
-    android:rowCount="1">
+    android:rowCount="1"
+    android:id="@+id/settings_layout">
 
 
     <TextView

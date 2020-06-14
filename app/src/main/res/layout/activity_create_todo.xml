@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="mox.todo.app.ui.activities.CreateTodoActivity"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:id="@+id/create_todo_activity">
 
     <include
         layout = "@layout/app_bar_create_todo"

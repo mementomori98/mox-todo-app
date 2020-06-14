@@ -2,17 +2,22 @@ package mox.todo.app.ui.activities
 
 
 import android.view.Gravity
+import androidx.annotation.IdRes
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.DrawerActions
 import androidx.test.espresso.contrib.DrawerMatchers.isClosed
+import androidx.test.espresso.contrib.NavigationViewActions.navigateTo
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.google.firebase.auth.FirebaseAuth
 import mox.todo.app.R
+import mox.todo.app.authenticateTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,18 +30,24 @@ class NavigationTest {
 
     @Rule
     @JvmField
-    var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
+    var activityTestRule = ActivityTestRule(MainActivity::class.java)
+
+    private fun navigate(@IdRes id: Int) {
+        onView(withId(R.id.drawer_layout))
+            .perform(DrawerActions.open())
+        onView(withId(R.id.nav_view))
+            .perform(navigateTo(id))
+    }
 
     @Before
     fun setup() {
-        if (FirebaseAuth.getInstance().currentUser?.email != "test@test.com") {
-            FirebaseAuth.getInstance().signOut()
-            Thread.sleep(2000)
-            FirebaseAuth.getInstance().signInWithEmailAndPassword("test@test.com", "asd123")
-            Thread.sleep(2000)
-            runOnUiThread { mActivityTestRule.activity.recreate() }
-        }
+        authenticateTest(activityTestRule.activity)
+        Intents.init()
+    }
 
+    @After
+    fun tearDown() {
+        Intents.release()
     }
 
     @Test
@@ -49,14 +60,30 @@ class NavigationTest {
         onView(withId(R.id.drawer_layout))
             .check(matches(isClosed(Gravity.LEFT)))
             .perform(DrawerActions.open())
+
         onView(withId(R.id.nav_view))
             .check(matches(isDisplayed()))
     }
 
     @Test
-    fun todosDisplayed() {
-        onView(withId(R.layout.fragment_todos))
+    fun todosDisplayedByDefault() {
+        onView(withId(R.id.todos_layout))
             .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navigateToSettings() {
+        navigate(R.id.nav_settings)
+
+        onView(withId(R.id.settings_layout))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun navigateToNewList() {
+        navigate(R.id.nav_new_list)
+
+        intended(hasComponent(CreateListActivity::class.java.name))
     }
 
 }
