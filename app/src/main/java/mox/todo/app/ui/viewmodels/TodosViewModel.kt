@@ -20,7 +20,7 @@ class TodosViewModel : ViewModel {
         this.listRepository = listRepository
     }
 
-    fun hasLists() = !listRepository.getAll().isEmpty()
+    fun hasLists() = listRepository.getAll().isNotEmpty()
     fun todos() = todoRepository.liveData(if (listId == null) null else listName())
     fun listName() = (listId?.let{ listRepository.getById(it) })?.name ?: "All Todos"
 
