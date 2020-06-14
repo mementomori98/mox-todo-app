@@ -1,67 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="60sp"
     android:paddingHorizontal="20sp">
 
-    <TextView
-        android:text="@string/create_todo_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <Spinner
         android:id="@+id/list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <TextView
-        android:text="@string/create_task_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="150dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.574"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/title"
+        style="@style/TextMedium"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list" />
+
+    <NumberPicker
+        android:id="@+id/priority"
+        android:layout_width="61dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/notes" />
+
+    <TextView
+        android:id="@+id/textView5"
+        style="@style/TextMedium"
+        android:layout_width="146dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/create_todo_list"
+        app:layout_constraintBottom_toTopOf="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.461" />
 
     <TextView
         android:id="@+id/tv_notes"
-        android:layout_width="match_parent"
+        style="@style/TextMedium"
+        android:layout_width="251dp"
         android:layout_height="wrap_content"
-        android:text="@string/create_task_notes" />
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/create_task_notes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <EditText
         android:id="@+id/notes"
+        style="@style/TextMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
         android:gravity="top|start"
         android:inputType="textMultiLine"
         android:lines="4"
         android:minLines="1"
         android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notes" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/TextMedium"
+        android:layout_width="114dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="64dp"
+        android:text="@string/create_task_priority"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notes" />
+
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/TextMedium"
+        android:layout_width="251dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:text="@string/create_task_priority"
-            android:layout_height="wrap_content"
-            android:layout_width="100sp"
-            android:layout_gravity="center"/>
-
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/priority"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/create_task_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

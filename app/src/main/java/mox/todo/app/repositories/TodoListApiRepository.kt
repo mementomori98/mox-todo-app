@@ -12,6 +12,7 @@ class TodoListApiRepository private constructor() : TodoListRepository {
 
     private val liveData = MutableLiveData<List<TodoList>>()
     private val api = TodoApiClientImpl.instance
+    private val todoRepository = TodoApiRepository.instance
 
     init {
         liveData.value = ArrayList() // must not be null at any point in time
@@ -30,7 +31,7 @@ class TodoListApiRepository private constructor() : TodoListRepository {
         return true
     }
 
-    override fun delete(id: Int) = api.deleteList(id) { updateLiveData() }
+    override fun delete(id: Int) = api.deleteList(id) { updateLiveData(); todoRepository.updateLiveData() }
 
     override fun exists(id: Int): Boolean = liveData.value.any { it.key == id }
 

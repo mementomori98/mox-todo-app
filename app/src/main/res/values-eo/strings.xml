@@ -25,4 +25,6 @@
     <string name="delete_list_prompt"><![CDATA[\"Feed \'&var&\' to the Fish?]]></string>
     <string name="yes">Sink it!</string>
     <string name="no">Ho-ho!</string>
+    <string name="cerate_todo_title_hint">Blimey!</string>
+    <string name="create_todo_notes_hint">Batten Down the Hatches!</string>
 </resources>

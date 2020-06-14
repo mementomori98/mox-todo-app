@@ -11,7 +11,8 @@
     <TextView
         android:text="@string/create_todo_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/TextMedium"/>
 
     <Spinner
         android:id="@+id/list"
@@ -22,18 +23,21 @@
     <TextView
         android:text="@string/create_task_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/TextMedium"/>
 
     <EditText
         android:id="@+id/title"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
+        android:layout_width="match_parent"
+        style="@style/TextMedium"/>
 
     <TextView
         android:id="@+id/tv_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_task_notes" />
+        android:text="@string/create_task_notes"
+        style="@style/TextMedium"/>
 
     <EditText
         android:id="@+id/notes"
@@ -43,7 +47,8 @@
         android:minLines="1"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/TextMedium"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +59,8 @@
             android:text="@string/create_task_priority"
             android:layout_height="wrap_content"
             android:layout_width="100sp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            style="@style/TextMedium"/>
 
         <NumberPicker
             android:layout_width="wrap_content"

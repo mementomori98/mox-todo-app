@@ -1,13 +1,19 @@
 package mox.todo.app.ui.activities
 
 import android.content.Intent
+import android.graphics.BlendMode
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -76,7 +82,11 @@ class MainActivity : ActivityBase() {
         val menu = navigationView.menu
         menu.removeGroup(R.id.menu_todo_lists)
         menu.add(R.id.menu_todo_lists, allTodosId, Menu.NONE, resources.getString(R.string.all_todos))
-        lists.forEach { list -> menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name) }
+        lists.forEach { list ->
+            val item = menu.add(R.id.menu_todo_lists, list.key, list.key + 1, list.name)
+            val icon = resources.getDrawable(mapIcon(list.color), null)
+            item.icon = icon
+        }
     })
 
     private fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -116,6 +126,14 @@ class MainActivity : ActivityBase() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_delete_list -> false
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun mapIcon(listColor: Int) = when (listColor) {
+        0 -> R.drawable.ic_list_blue
+        1 -> R.drawable.ic_list_red
+        2 -> R.drawable.ic_list_yellow
+        3 -> R.drawable.ic_list_green
+        else -> R.id.blue
     }
 
 }

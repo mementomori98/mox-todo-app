@@ -9,7 +9,7 @@
     <color name="todo_item_separator">#CACACA</color>
     <color name="backgroundLight">#EEEEEE</color>
     <color name="textColorLight">#222222</color>
-    <color name="backgroundDark">#777777</color>
+    <color name="backgroundDark">#535353</color>
     <color name="textColorDark">#FFFFFF</color>
 
     <color name="blue">#0465C6</color>

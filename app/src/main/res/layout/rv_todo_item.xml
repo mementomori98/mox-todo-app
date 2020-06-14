@@ -54,6 +54,7 @@
             android:id="@+id/priority"
             android:layout_width="50sp"
             android:layout_height="match_parent"
+            style="@style/TextMedium"
             android:gravity="center"
             />
     </LinearLayout>

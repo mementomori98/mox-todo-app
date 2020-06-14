@@ -32,5 +32,7 @@
     <string name="delete_list_prompt"><![CDATA[\"Are you sure you want to delete \'&var&\'? All Todos in this list will be deleted\"]]></string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="cerate_todo_title_hint">Groceries…</string>
+    <string name="create_todo_notes_hint">Don\'t forget bread....</string>
 
 </resources>
