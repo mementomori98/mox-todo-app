@@ -28,5 +28,9 @@
     <string name="no_list_error">To add Todos, you need to create a list first</string>
     <string name="settings_language">Language</string>
     <string name="settings_compact">Hide Todo notes</string>
+    <string name="create_list_error">List name must not be empty</string>
+    <string name="delete_list_prompt"><![CDATA[\"Are you sure you want to delete \'&var&\'? All Todos in this list will be deleted\"]]></string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

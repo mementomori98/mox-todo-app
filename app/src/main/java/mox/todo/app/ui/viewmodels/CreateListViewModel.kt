@@ -9,8 +9,7 @@ class CreateListViewModel : ViewModel() {
     private val todoListRepository = TodoListApiRepository.instance
 
     fun addTodoList(list: TodoList): Boolean {
-        todoListRepository.add(list)
-        return true
+        return todoListRepository.add(list)
     }
 
 }

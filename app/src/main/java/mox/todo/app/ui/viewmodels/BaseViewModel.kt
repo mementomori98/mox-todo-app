@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import mox.todo.app.repositories.TodoApiRepository
 import mox.todo.app.repositories.TodoListApiRepository
 
-class StartupViewModel : ViewModel() {
+class BaseViewModel: ViewModel() {
 
     private val todoRepository = TodoApiRepository.instance
     private val listRepository = TodoListApiRepository.instance
@@ -13,5 +13,4 @@ class StartupViewModel : ViewModel() {
         todoRepository.updateLiveData()
         listRepository.updateLiveData()
     }
-
 }

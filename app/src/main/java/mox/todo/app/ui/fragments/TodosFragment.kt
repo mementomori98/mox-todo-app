@@ -1,5 +1,7 @@
 package mox.todo.app.ui.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,6 +18,7 @@ import mox.todo.app.models.Todo
 import mox.todo.app.ui.activities.CreateTodoActivity
 import mox.todo.app.ui.activities.UpdateTodoActivity
 import mox.todo.app.ui.viewmodels.TodosViewModel
+
 
 class TodosFragment(private val listId: Int? = null, private val onListDeleteListener: () -> Unit = {}) : FragmentBase<TodosViewModel>() {
 
@@ -33,18 +35,7 @@ class TodosFragment(private val listId: Int? = null, private val onListDeleteLis
         viewModel.listId = listId
 
         val fab: FloatingActionButton = root.findViewById(R.id.fab)
-        fab.setOnClickListener {
-            if (!viewModel.hasLists()) {
-                Toast.makeText(activity, resources.getString(R.string.no_list_error), Toast.LENGTH_LONG).show()
-            }
-            else {
-                val bundle = Bundle()
-                viewModel.listId?.let { bundle.putInt("listId", it) }
-                val intent = Intent(activity, CreateTodoActivity::class.java)
-                intent.putExtras(bundle)
-                startActivity(intent)
-            }
-        }
+        fab.setOnClickListener(startCreateTodosActivity())
 
         setViewColors()
         setupRecyclerView()
@@ -52,14 +43,36 @@ class TodosFragment(private val listId: Int? = null, private val onListDeleteLis
         return root
     }
 
+    private fun startCreateTodosActivity(): (v: View) -> Unit = {
+        if (!viewModel.hasLists()) {
+            Toast.makeText(activity, resources.getString(R.string.no_list_error), Toast.LENGTH_LONG).show()
+        } else {
+            val bundle = Bundle()
+            viewModel.listId?.let { bundle.putInt("listId", it) }
+            val intent = Intent(activity, CreateTodoActivity::class.java)
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_delete_list -> {
+            R.id.action_delete_list -> promptDeleteList()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun promptDeleteList() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage(resources.getString(R.string.delete_list_prompt).replace("&var&", viewModel.listName()))
+            .setCancelable(false)
+            .setPositiveButton(resources.getString(R.string.yes)) { dialog, id ->
                 viewModel.deleteList()
                 onListDeleteListener()
             }
-        }
-        return super.onOptionsItemSelected(item)
+            .setNegativeButton(resources.getString(R.string.no)) { dialog, id -> dialog.cancel() }
+        val alert: AlertDialog = builder.create()
+        alert.show()
     }
 
     private fun setupRecyclerView() {

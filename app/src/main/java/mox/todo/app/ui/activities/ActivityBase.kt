@@ -3,18 +3,23 @@ package mox.todo.app.ui.activities
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import mox.todo.app.R
+import mox.todo.app.ui.viewmodels.BaseViewModel
 import java.util.*
 import java.util.Arrays.asList
 
 abstract class ActivityBase : AppCompatActivity() {
 
+    private lateinit var viewModel: BaseViewModel
+
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(BaseViewModel::class.java)
         setLanguage()
         setTheme(readTheme())
     }
@@ -43,6 +48,8 @@ abstract class ActivityBase : AppCompatActivity() {
         super.onResume()
         if (!authenticated())
             startLoginActivity()
+        else
+            viewModel.updateLiveDatas()
     }
 
     private fun startLoginActivity() {

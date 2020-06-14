@@ -12,7 +12,7 @@ class CreateTodoViewModel : ViewModel() {
 
     var listId: Int? = null
 
-    val listName: String get() = listId?.let { listRepository.getById(it).name } ?: ""
+    val listName: String get() = listId?.let { listRepository.getById(it)?.name } ?: ""
 
     fun addTodo(todo: Todo) = todoRepository.add(todo)
 

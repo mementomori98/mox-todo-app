@@ -3,6 +3,7 @@ package mox.todo.app.repositories
 import android.util.Log
 import mox.todo.app.api.ApiFactory
 import mox.todo.app.api.TodoApi
+import mox.todo.app.api.TodoApiClientImpl
 import mox.todo.app.models.Todo
 import mox.todo.app.util.LiveData
 import mox.todo.app.util.MutableLiveData
@@ -16,27 +17,46 @@ import kotlin.collections.HashMap
 class TodoApiRepository private constructor() : TodoRepository {
 
     companion object {
-        private var _instance: TodoRepository? = null
-
-        val instance: TodoRepository get() {
-            if (_instance == null)
-                _instance = TodoApiRepository()
-            return _instance!!
-        }
+        val instance: TodoRepository = TodoApiRepository()
     }
 
     private val liveData = MutableLiveData<List<Todo>>()
     private val liveDataMap = HashMap<String, MutableLiveData<List<Todo>>>()
-    private val api = ApiFactory.build<TodoApi>()
+    private val api = TodoApiClientImpl.instance
 
     init {
-        liveData.value = ArrayList()
+        liveData.value = ArrayList() // must not be null at any point in time
         updateLiveData()
     }
 
     override fun liveData(list: String?): LiveData<List<Todo>> {
         if (list == null) return liveData
         return liveDataMap[list] ?: createListLiveData(list)
+    }
+
+    override fun add(todo: Todo, position: Int): Boolean {
+        if (todo.title == "") return false
+        todo.position = position
+        api.addTodo(todo) { updateLiveData() }
+        return true
+    }
+
+    override fun update(todo: Todo): Boolean {
+        if (todo.title == "") return false
+        api.updateTodo(todo) { updateLiveData() }
+        return true
+    }
+
+    override fun delete(id: Int) = api.deleteTodo(id) { updateLiveData() }
+
+    override fun updateLiveData() = api.getTodos {
+        if (it != null) {
+            val list = it.sortedBy { t -> t.list?.toLowerCase(Locale.ROOT) }
+            liveData.value = list
+            liveDataMap.forEach { (list, data) ->
+                data.value = filterLiveDataByList(list)
+            }
+        }
     }
 
     private fun createListLiveData(list: String): MutableLiveData<List<Todo>> {
@@ -50,68 +70,5 @@ class TodoApiRepository private constructor() : TodoRepository {
         return this.liveData.value.filter {
             it.list == list
         }
-    }
-
-    override fun add(todo: Todo, position: Int): Boolean {
-        if (todo.title == "") return false
-        todo.position = position
-        api.addTodo(todo).enqueue(object : Callback<Todo> {
-            override fun onFailure(call: Call<Todo>, t: Throwable) {
-                Log.d("API", "Add todo failure")
-            }
-
-            override fun onResponse(call: Call<Todo>, response: Response<Todo>) {
-                if (response.isSuccessful)
-                    updateLiveData()
-                else
-                    Log.d("API", "Add todo failed")
-            }
-        })
-        return true
-    }
-
-    override fun update(todo: Todo): Boolean {
-        if (todo.title == "") return false
-        api.updateTodo(todo).enqueue(object : Callback<Todo> {
-            override fun onFailure(call: Call<Todo>, t: Throwable) {
-                Log.d("API", "Add todo failure")
-            }
-
-            override fun onResponse(call: Call<Todo>, response: Response<Todo>) {
-                if (response.isSuccessful)
-                    updateLiveData()
-                else
-                    Log.d("API", "Update todo failed")
-            }
-        })
-        return true
-    }
-
-    override fun delete(id: Int) = api.deleteTodo(id).enqueue(object : Callback<Void> {
-        override fun onFailure(call: Call<Void>, t: Throwable) {
-        }
-
-        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-            updateLiveData()
-        }
-    })
-
-    override fun updateLiveData() {
-        api.getTodos().enqueue(object : Callback<List<Todo>> {
-            override fun onFailure(call: Call<List<Todo>>, t: Throwable) {
-                throw t
-            }
-
-            override fun onResponse(call: Call<List<Todo>>, response: Response<List<Todo>>) {
-                response.body()?.let {
-                    val list = it.sortedBy { t -> t.list?.toLowerCase(Locale.ROOT) ?: "a" }
-                    liveData.value = list
-                    liveDataMap.forEach { (list, data) ->
-                        data.value = filterLiveDataByList(list)
-                    }
-                }
-            }
-
-        })
     }
 }

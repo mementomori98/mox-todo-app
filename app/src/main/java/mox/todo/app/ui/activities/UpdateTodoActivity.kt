@@ -62,7 +62,7 @@ class UpdateTodoActivity : AppCompatActivity() {
                 title.text.toString(),
                 notes.text.toString(),
                 priority.value,
-                list.selectedItem?.toString(),
+                list.selectedItem.toString(),
                 0,
                 viewModel.todo.key)
             )

@@ -20,10 +20,9 @@ class TodosViewModel(app: Application) : AndroidViewModel(app) {
     fun todos() = todoRepository.liveData(if (listId == null) null else listName())
     fun listName() = (listId?.let{ todoListRepository.getById(it) })?.name ?: allTodosString
 
-
     fun listColor(): Int {
         if (listId == null) return 0
-        return todoListRepository.getById(listId!!).color
+        return todoListRepository.getById(listId!!)?.color ?: 0
     }
 
     fun deleteTodo(todo: Todo) = todoRepository.delete(todo.key)

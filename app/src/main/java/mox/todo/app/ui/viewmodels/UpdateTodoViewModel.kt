@@ -13,7 +13,6 @@ class UpdateTodoViewModel : ViewModel() {
     lateinit var todo: Todo
 
     fun updateTodo(todo: Todo) = todoRepository.update(todo)
-
     fun listNames() = listRepository.getAll().map { it.name }
 
 }

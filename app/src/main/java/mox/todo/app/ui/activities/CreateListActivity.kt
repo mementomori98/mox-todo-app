@@ -48,7 +48,7 @@ class CreateListActivity : ActivityBase() {
         ))) finish()
         else
             Toast.makeText(this,
-                "An error occurred",
+                resources.getString(R.string.create_list_error),
                 Toast.LENGTH_SHORT)
             .show()
     }
